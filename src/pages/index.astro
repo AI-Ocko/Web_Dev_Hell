@@ -1,0 +1,52 @@
+---
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const journal = (await getCollection("journal", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const sections = [
+  { href: "/journal", title: "Journal", blurb: "Long-form writings." },
+  { href: "/reviews", title: "Reviews", blurb: "TV & movie notes with ratings." },
+  { href: "/watchlist", title: "Watchlist", blurb: "Things queued up." },
+  { href: "/recipes", title: "Recipes", blurb: "Things worth cooking again." },
+  { href: "/projects", title: "Projects", blurb: "Code I've shipped or am shipping." },
+];
+---
+
+<Base title="Web Dev Hell">
+  <h1>Web Dev Hell</h1>
+  <p>
+    A public notebook. Pick a room.
+  </p>
+
+  <ul class="entries">
+    {
+      sections.map((s) => (
+        <li>
+          <a href={`${base}${s.href}`}>{s.title}</a>
+          <span class="meta">{s.blurb}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  {journal.length > 0 && (
+    <>
+      <h2>Recent journal</h2>
+      <ul class="entries">
+        {journal.map((e) => (
+          <li>
+            <a href={`${base}/journal/${e.slug}`}>
+              {String(e.data.number).padStart(3, "0")}: {e.data.title}
+            </a>
+            <span class="meta">{e.data.date.toISOString().slice(0, 10)}</span>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</Base>

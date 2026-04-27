@@ -1,0 +1,21 @@
+---
+import Entry from "../../layouts/Entry.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("journal");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const num = String(entry.data.number).padStart(3, "0");
+const meta = entry.data.date.toISOString().slice(0, 10);
+---
+
+<Entry title={`${num}: ${entry.data.title}`} meta={meta}>
+  <Content />
+</Entry>

@@ -1,0 +1,21 @@
+---
+import Entry from "../../layouts/Entry.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("reviews");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const stars = "★".repeat(entry.data.rating) + "☆".repeat(5 - entry.data.rating);
+const meta = `${entry.data.kind} · ${entry.data.year} · ${stars} · watched ${entry.data.watchedOn.toISOString().slice(0, 10)}`;
+---
+
+<Entry title={entry.data.title} meta={meta}>
+  <Content />
+</Entry>

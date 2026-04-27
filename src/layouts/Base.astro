@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname.replace(base, "/").replace(/\/+$/, "") || "/";
+
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/journal", label: "Journal" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/watchlist", label: "Watchlist" },
+  { href: "/recipes", label: "Recipes" },
+  { href: "/projects", label: "Projects" },
+  { href: "/about", label: "About" },
+];
+
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body>
+    <nav>
+      {
+        navItems.map((item) => (
+          <a
+            href={`${base.replace(/\/$/, "")}${item.href === "/" ? "/" : item.href}`}
+            class={isCurrent(item.href) ? "current" : ""}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>If you know the way broadly, you will see it in everything.</p>
+    </footer>
+  </body>
+</html>

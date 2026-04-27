@@ -1,0 +1,18 @@
+---
+import Base from "./Base.astro";
+
+interface Props {
+  title: string;
+  meta?: string;
+}
+
+const { title, meta } = Astro.props;
+---
+
+<Base title={title}>
+  <article>
+    <h1>{title}</h1>
+    {meta && <p class="meta" style="font-family: var(--mono); color: var(--muted);">{meta}</p>}
+    <slot />
+  </article>
+</Base>

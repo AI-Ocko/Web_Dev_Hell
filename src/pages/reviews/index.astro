@@ -1,0 +1,43 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const entries = (await getCollection("reviews", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.watchedOn.getTime() - a.data.watchedOn.getTime()
+);
+
+const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
+---
+
+<Base title="Reviews">
+  <h1>Reviews</h1>
+  {entries.length === 0 ? (
+    <p>No reviews yet.</p>
+  ) : (
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Kind</th>
+          <th>Year</th>
+          <th>Rating</th>
+          <th>Watched</th>
+        </tr>
+      </thead>
+      <tbody>
+        {entries.map((e) => (
+          <tr>
+            <td>
+              <a href={`${base}/reviews/${e.slug}`}>{e.data.title}</a>
+            </td>
+            <td>{e.data.kind}</td>
+            <td>{e.data.year}</td>
+            <td>{stars(e.data.rating)}</td>
+            <td>{e.data.watchedOn.toISOString().slice(0, 10)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</Base>

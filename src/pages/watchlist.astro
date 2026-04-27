@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const entries = (await getCollection("watchlist")).sort(
+  (a, b) => b.data.addedOn.getTime() - a.data.addedOn.getTime()
+);
+---
+
+<Base title="Watchlist">
+  <h1>Watchlist</h1>
+  {entries.length === 0 ? (
+    <p>Nothing queued up.</p>
+  ) : (
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Kind</th>
+          <th>Source</th>
+          <th>Added</th>
+        </tr>
+      </thead>
+      <tbody>
+        {entries.map((e) => (
+          <tr>
+            <td>{e.data.title}</td>
+            <td>{e.data.kind}</td>
+            <td>{e.data.source ?? ""}</td>
+            <td>{e.data.addedOn.toISOString().slice(0, 10)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</Base>

@@ -1,0 +1,26 @@
+---
+import Entry from "../../layouts/Entry.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("recipes");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const meta = [
+  entry.data.servings && `serves ${entry.data.servings}`,
+  entry.data.time,
+  entry.data.tags.join(", "),
+]
+  .filter(Boolean)
+  .join(" · ");
+---
+
+<Entry title={entry.data.title} meta={meta}>
+  <Content />
+</Entry>
