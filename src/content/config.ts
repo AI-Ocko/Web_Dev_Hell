@@ -14,7 +14,7 @@ const reviews = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    kind: z.enum(["movie", "tv"]),
+    kind: z.enum(["movie", "tv", "anime"]),
     year: z.number().int(),
     rating: z.number().int().min(1).max(5),
     watchedOn: z.coerce.date(),
@@ -26,7 +26,7 @@ const watchlist = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    kind: z.enum(["movie", "tv"]),
+    kind: z.enum(["movie", "tv", "anime"]),
     addedOn: z.coerce.date(),
     source: z.string().optional(),
   }),
