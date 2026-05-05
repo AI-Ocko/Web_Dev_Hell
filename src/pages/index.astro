@@ -9,11 +9,11 @@ const journal = (await getCollection("journal", ({ data }) => !data.draft))
   .slice(0, 3);
 
 const sections = [
-  { href: "/journal", title: "Journal", blurb: "Long-form writings." },
-  { href: "/reviews", title: "Reviews", blurb: "TV & movie notes with ratings." },
-  { href: "/watchlist", title: "Watchlist", blurb: "Things queued up." },
-  { href: "/recipes", title: "Recipes", blurb: "Things worth cooking again." },
-  { href: "/projects", title: "Projects", blurb: "Code I've shipped or am shipping." },
+  { href: "/journal", title: "Journal"},
+  { href: "/reviews", title: "Reviews"},
+  { href: "/watchlist", title: "Watchlist"},
+  { href: "/recipes", title: "Recipes"},
+  { href: "/projects", title: "Projects"},
 ];
 ---
 
